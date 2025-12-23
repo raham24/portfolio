@@ -7,7 +7,7 @@ import { Article } from "./article";
 
 export default async function ProjectsPage() {
 
-  const featured = allProjects.find((project) => project.slug === "unkey")!;
+  const featured = allProjects.find((project) => project.slug === "thesis")!;
   const top2 = allProjects.find((project) => project.slug === "planetfall")!;
   const top3 = allProjects.find((project) => project.slug === "highstorm")!;
   const sorted = allProjects
