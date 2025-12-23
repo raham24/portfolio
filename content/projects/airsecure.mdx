@@ -1,0 +1,71 @@
+---
+title: "AirSecure"
+description: Production-ready web application for detecting rogue access points and evil twin networks using machine learning and hardware detection
+repository: raham24/AirSecure
+date: "2024-11-15"
+published: true
+url: https://github.com/raham24/AirSecure
+---
+
+![AirSecure Logo](https://raw.githubusercontent.com/raham24/AirSecure/main/assets/images/dark-logo.svg)
+
+
+- JWT-based authentication with HttpOnly cookies
+- Real-time rogue access point detection
+- Machine learning-powered wireless security analysis
+- Role-based access control and user management
+- Responsive Material UI design system
+- Type-safe development with TypeScript
+- Docker deployment support
+
+## Overview
+
+AirSecure is a full-stack security application that serves as the frontend for a hardware-based network security tool. The system leverages machine learning algorithms to identify malicious wireless networks, including rogue access points and evil twin attacks.
+
+## Tech Stack
+
+**Frontend**
+- Next.js (App Router)
+- React
+- Material UI
+- Emotion styling
+
+**Backend**
+- Next.js API Routes
+- Python ML Engine
+- PostgreSQL database
+
+**Security**
+- JWT authentication
+- HttpOnly cookie sessions
+- Protected route middleware
+
+## Architecture
+
+The application follows a modular, extensible architecture with clear separation of concerns. The frontend communicates with a Python-based machine learning engine that processes wireless network data and identifies potential security threats.
+
+```typescript
+// Example: Protected API route
+export async function GET(request: Request) {
+  const session = await verifySession(request);
+
+  if (!session) {
+    return new Response('Unauthorized', { status: 401 });
+  }
+
+  // Process security data
+  const threats = await detectThreats();
+  return Response.json(threats);
+}
+```
+
+## Features
+
+### Security Detection
+Real-time monitoring and detection of malicious wireless networks through hardware-based scanning and machine learning analysis.
+
+### User Management
+Complete user registration, authentication, and profile management with role-based access control for team collaboration.
+
+### Data Visualization
+Interactive dashboards displaying network security metrics, threat analytics, and historical detection data.

@@ -12,6 +12,9 @@ export function useMDXComponents(components: any): any {
 		h2: ({ children }: PropsWithChildren) => (
 			<h2 className="text-zinc-50">{children}</h2>
 		),
+		img: ({ src, alt }: { src?: string; alt?: string }) => (
+			<img src={src} alt={alt} className="border-0 my-4" />
+		),
 		...components,
 	};
 }
