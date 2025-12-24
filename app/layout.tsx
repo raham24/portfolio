@@ -6,16 +6,16 @@ import { Analytics } from "./components/analytics";
 
 export const metadata: Metadata = {
   title: {
-    default: "chronark.com",
+    default: "Raham Butt",
     template: "%s | chronark.com",
   },
-  description: "Co-founder of unkey.dev and founder of planetfall.io",
+  description: "Portfolio of Raham Butt",
   openGraph: {
-    title: "chronark.com",
+    title: "Raham Butt",
     description:
       "Co-founder of unkey.dev and founder of planetfall.io",
-    url: "https://chronark.com",
-    siteName: "chronark.com",
+    url: "https://github.com/raham24",
+    siteName: "Raham Butt",
     images: [
       {
         url: "https://chronark.com/og.png",

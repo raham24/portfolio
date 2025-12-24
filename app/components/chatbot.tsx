@@ -7,12 +7,27 @@ export function Chatbot() {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
+
+  // Auto-hide tooltip after 8 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowTooltip(false);
+    }, 8000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleOpenChat = () => {
+    setIsOpen(true);
+    setShowTooltip(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,13 +60,28 @@ export function Chatbot() {
     <>
       {/* Floating Chat Button */}
       {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-8 right-8 z-50 p-4 rounded-full bg-zinc-800 border border-zinc-700 hover:bg-zinc-700 hover:border-zinc-600 transition-all duration-200 shadow-lg group"
-          aria-label="Open chat"
-        >
-          <MessageCircle className="w-6 h-6 text-zinc-300 group-hover:text-zinc-100" />
-        </button>
+        <div className="fixed bottom-8 right-8 z-50">
+          {/* Tooltip */}
+          {showTooltip && (
+            <div className="absolute bottom-full right-0 mb-3 animate-fade-in-fast">
+              <div className="relative bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-3 shadow-2xl animate-pulse">
+                <p className="text-sm font-medium text-zinc-100 whitespace-nowrap">
+                  Got more questions? Click me
+                </p>
+                {/* Arrow pointing down */}
+                <div className="absolute -bottom-1 right-6 w-2 h-2 bg-zinc-800 border-r border-b border-zinc-600 transform rotate-45"></div>
+              </div>
+            </div>
+          )}
+
+          <button
+            onClick={handleOpenChat}
+            className="p-4 rounded-full bg-zinc-800 border border-zinc-700 hover:bg-zinc-700 hover:border-zinc-600 transition-all duration-200 shadow-lg group"
+            aria-label="Open chat"
+          >
+            <MessageCircle className="w-6 h-6 text-zinc-300 group-hover:text-zinc-100" />
+          </button>
+        </div>
       )}
 
       {/* Chat Window */}
