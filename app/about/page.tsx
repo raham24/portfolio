@@ -3,6 +3,7 @@ import React from "react";
 import { Navigation } from "../components/nav";
 import { Card } from "../components/card";
 import Particles from "../components/particles";
+import { Chatbot } from "../components/chatbot";
 
 export default function About() {
 	return (
@@ -163,6 +164,7 @@ export default function About() {
 					</div>
 				</div>
 			</div>
+			<Chatbot />
 		</div>
 	);
 }
