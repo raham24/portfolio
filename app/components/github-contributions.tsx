@@ -24,24 +24,34 @@ export function GitHubContributions({ username }: { username: string }) {
         );
         const result = await response.json();
 
-        // Find the max count to normalize levels properly
-        const maxCount = Math.max(
-          ...result.contributions.map((c: any) => c.count),
+        // Calculate cutoff date for last 10 months
+        const today = new Date();
+        const tenMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 10, today.getDate());
+
+        // Filter to only last 10 months and transform the data
+        const filteredContributions = result.contributions.filter((c: any) => {
+          const contributionDate = new Date(c.date);
+          return contributionDate >= tenMonthsAgo;
+        });
+
+        // Recalculate max count for the filtered data
+        const filteredMaxCount = Math.max(
+          ...filteredContributions.map((c: any) => c.count),
           1
         );
 
         // Transform the data to our format with proper level calculation
-        const contributions: Activity[] = result.contributions.map((contribution: any) => {
+        const contributions: Activity[] = filteredContributions.map((contribution: any) => {
           const count = contribution.count;
           let level = 0;
 
           if (count === 0) {
             level = 0;
-          } else if (count < maxCount * 0.25) {
+          } else if (count < filteredMaxCount * 0.25) {
             level = 1;
-          } else if (count < maxCount * 0.5) {
+          } else if (count < filteredMaxCount * 0.5) {
             level = 2;
-          } else if (count < maxCount * 0.75) {
+          } else if (count < filteredMaxCount * 0.75) {
             level = 3;
           } else {
             level = 4;

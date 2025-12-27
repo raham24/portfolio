@@ -36,7 +36,7 @@ export default function About() {
 									cybersecurity. My personal interests lie in intrusion detection systems, red teaming, hardware and full stack development.
 								</p>
 								<p>
-									Apart from acedemics, I have been an active member of various computing clubs and organizations, where I have honed my skills in collaborative projects and leadership roles.
+									Apart from academics, I have been an active member of various computing clubs and organizations, where I have honed my skills in collaborative projects and leadership roles.
 									I served as the founding president of the largest computing club at my university and the chair of ACM chapter at Hofstra, continuing a legacy of 50 years.
 								</p>
 							</div>
@@ -64,7 +64,7 @@ export default function About() {
 									<div className="text-sm text-zinc-500 mb-1">Present</div>
 									<div className="text-zinc-300 font-medium">Student IT Technician</div>
 									<div className="text-zinc-400 text-sm mt-1">
-										3 years at Muarice A. Deane School of Law at Hofstra University
+										3 years at Maurice A. Deane School of Law at Hofstra University
 									</div>
 								</div>
 
@@ -157,6 +157,31 @@ export default function About() {
 							<GitHubContributions username="raham24" />
 						</div>
 					</Card>
+
+					{/* Resume Download */}
+					<div className="text-center py-8">
+						<a
+							href="/resume.pdf"
+							download="Raham_Butt_Resume.pdf"
+							className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 hover:border-zinc-600 rounded-lg transition-all duration-200 text-zinc-100 font-medium"
+						>
+							<svg
+								className="w-5 h-5"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+								/>
+							</svg>
+							Download Resume
+						</a>
+					</div>
 				</div>
 			</div>
 			<Chatbot />
