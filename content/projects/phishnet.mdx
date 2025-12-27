@@ -1,0 +1,111 @@
+---
+title: "PhishNet"
+description: Chrome extension providing real-time phishing detection and protection using machine learning with 87% accuracy
+repository: raham24/phishNet
+date: "2024-05-20"
+published: true
+---
+
+- Real-time URL scanning and threat detection
+- Machine learning-based classification with 87% accuracy
+- User authentication with secure password hashing
+- Whitelist management for trusted websites
+- Visual statistics dashboard for browsing safety
+- Customizable notification preferences
+- One-click protection toggle
+
+## Overview
+
+PhishNet is a Chrome extension that protects users from phishing attacks in real-time. Using a Random Forest machine learning model trained on URL patterns and website characteristics, PhishNet automatically analyzes each website you visit and alerts you to potential security threats before you interact with malicious content.
+
+## Tech Stack
+
+**Extension Frontend**
+- JavaScript (Chrome Extension API)
+- HTML/CSS
+- Chrome Storage API
+
+**Backend**
+- Python Flask
+- Flask-CORS
+- PostgreSQL database
+
+**Machine Learning**
+- scikit-learn (Random Forest Classifier)
+- pandas & numpy for data processing
+- BeautifulSoup4 for web scraping
+- python-whois for domain analysis
+
+## Machine Learning Model
+
+### Feature Engineering
+PhishNet's Random Forest classifier analyzes multiple URL and domain characteristics:
+
+```python
+# Key features analyzed for phishing detection
+features = [
+    'ip_presence',      # IP address in URL
+    'url_length',       # Total URL length
+    'shortening_service', # URL shortener usage
+    'ssl_cert_valid',   # SSL certificate status
+    'domain_age',       # Domain registration age
+    'subdomain_count',  # Number of subdomains
+    'google_indexed'    # Google search indexing
+]
+```
+
+### Classification System
+- **Safe (1)**: Legitimate website with low risk indicators
+- **Unsafe (0)**: Suspicious characteristics detected
+- **Phishing (-1)**: High-confidence phishing attempt
+
+**Model Accuracy**: 87% on test dataset
+
+## Key Features
+
+### Real-Time Protection
+Automatic scanning of URLs as you browse, with instant notifications when phishing attempts are detected. No manual interaction required - protection runs seamlessly in the background.
+
+### Whitelist Management
+Users can maintain a personalized whitelist of trusted domains to reduce false positives and improve browsing experience for frequently visited sites.
+
+### Security Dashboard
+Visual statistics showing:
+- Total websites scanned
+- Phishing attempts blocked
+- Whitelisted domains
+- Protection status
+
+### Secure User Authentication
+- SHA-256 password hashing
+- SQL injection protection
+- User session management
+- Isolated user data storage
+
+## Architecture
+
+PhishNet follows a three-tier architecture separating the browser extension frontend, Flask API backend, and PostgreSQL database layer. This design ensures scalability, security, and maintainability.
+
+```javascript
+// Example: Extension background script
+chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
+  if (info.status === 'complete' && tab.url) {
+    const result = await analyzeURL(tab.url);
+
+    if (result.prediction === -1) {
+      // Alert user to phishing threat
+      showPhishingWarning(tab.url);
+      logThreat(tab.url);
+    }
+  }
+});
+```
+
+## Use Cases
+
+Perfect for:
+- Individual users seeking enhanced browsing security
+- Organizations protecting employees from phishing attacks
+- Security-conscious users managing multiple online accounts
+- Educational demonstrations of ML-based security tools
+- Research on phishing detection methodologies

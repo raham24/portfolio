@@ -1,0 +1,73 @@
+---
+title: "BN254 CUDA"
+description: CUDA implementation of BN254 elliptic curve field arithmetic with GPU-accelerated Montgomery multiplication
+repository: raham24/bn254_cuda
+date: "2025-01-15"
+published: true
+---
+
+- GPU-accelerated field arithmetic operations
+- Montgomery multiplication optimization
+- Batch processing (thousands of elements in parallel)
+- 20-60x speedup over CPU implementations
+- Comprehensive test suites
+- Educational implementation with detailed comments
+
+## Overview
+
+BN254 CUDA implements finite field arithmetic operations for the BN254 elliptic curve using CUDA acceleration. The project demonstrates GPU optimization techniques for cryptographic computations, serving as a foundation for Zero Knowledge Proof system acceleration.
+
+## Tech Stack
+
+- CUDA Toolkit 11.0+
+- NVIDIA GPU (Compute capability 7.0+)
+- CMake 3.18+ build system
+- C++/CUDA C++
+
+## Performance
+
+Benchmarked on NVIDIA RTX 3080:
+
+| Operation | Performance | CPU Speedup |
+|-----------|-------------|-------------|
+| Addition | ~500 MOps/s | 20x faster |
+| Multiplication | ~400 MOps/s | 50x faster |
+| Montgomery Mult | ~450 MOps/s | 60x faster |
+
+## Key Features
+
+**Field Arithmetic**: GPU-accelerated modular addition, subtraction, and multiplication with automatic reduction and overflow handling for BN254 finite field operations.
+
+**Montgomery Multiplication**: Optimized Montgomery form arithmetic enabling efficient batch processing of cryptographic operations without expensive modular reductions.
+
+**Batch Processing**: Parallel computation across thousands of field elements simultaneously, maximizing GPU utilization for high-throughput cryptographic workloads.
+
+**Educational Design**: Progressive complexity with detailed algorithm comments, debug modes, and CPU reference implementations for learning GPU optimization techniques.
+
+## Architecture
+
+```cpp
+// Example: Batch Montgomery multiplication on GPU
+__global__ void montgomery_mult_kernel(
+    const FieldElement* a,
+    const FieldElement* b,
+    FieldElement* result,
+    size_t n
+) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < n) {
+        result[idx] = montgomery_mult(a[idx], b[idx]);
+    }
+}
+```
+
+## BN254 Parameters
+
+- **Prime modulus**: 21888242871839275222246405745257275088696311157297823662689037894645226208583
+- **Precision**: 256-bit (4 × 64-bit limbs)
+- **Curve equation**: y² = x³ + 3
+- **Montgomery constants**: Optimized for GPU architectures
+
+## Applications
+
+Foundation for GPU-accelerated Zero Knowledge Proof systems including Nova folding, PLONK/Groth16 proof generation, and elliptic curve cryptography research. Directly supports thesis work on FPGA vs GPU performance comparisons.

@@ -1,0 +1,82 @@
+---
+title: "BN254-Fq GPU"
+description: CUDA-accelerated multi-scalar multiplication for BN254 elliptic curves with Rust bindings and arkworks integration
+repository: raham24/bn254-fq
+date: "2025-01-10"
+published: false
+---
+
+- CUDA GPU kernels for field operations and MSM
+- Rust wrapper with arkworks compatibility
+- Montgomery form arithmetic for efficiency
+- Projective coordinate point operations
+- Pippenger's bucket method for MSM
+- Up to 6.25x speedup over CPU implementation
+
+## Overview
+
+BN254-Fq GPU is a high-performance implementation of multi-scalar multiplication (MSM) for the BN254 elliptic curve using CUDA acceleration. The project provides low-level GPU kernels wrapped in a Rust API compatible with the arkworks ecosystem, enabling significant performance improvements for Zero Knowledge Proof systems.
+
+## Tech Stack
+
+**GPU Acceleration**
+- CUDA 11.0+ for parallel field operations
+- NVIDIA GPU (Compute capability 7.0+)
+- Custom kernels for Montgomery arithmetic
+
+**High-Level Interface**
+- Rust 1.70+
+- arkworks (ark-bn254) integration
+- Dual CPU/GPU implementations
+
+## Performance
+
+Benchmarked on NVIDIA RTX 3080 vs AMD Ryzen 9 5900X:
+
+| Points | CPU Time | GPU Time | Speedup |
+|--------|----------|----------|---------|
+| 100    | ~5ms     | ~2ms     | 2.5x    |
+| 500    | ~25ms    | ~5ms     | 5x      |
+| 1,000  | ~50ms    | ~8ms     | 6.25x   |
+
+## Key Features
+
+**Field Operations**: GPU-accelerated addition, subtraction, multiplication, squaring, and inversion on the BN254 base field (Fq) using Montgomery representation for efficient modular arithmetic.
+
+**Point Arithmetic**: Projective coordinate operations including point doubling, addition, and mixed addition optimized for parallel execution on GPU hardware.
+
+**Multi-Scalar Multiplication**: Parallel MSM implementation using Pippenger's bucket method, the standard algorithm for computing linear combinations of elliptic curve points efficiently.
+
+**arkworks Integration**: Seamless interoperability with the arkworks cryptography library, providing a familiar API for Rust developers working with Zero Knowledge Proof systems.
+
+## BN254 Curve Parameters
+
+- **Base Field (Fq)**: 254-bit prime field
+- **Scalar Field (Fr)**: 254-bit prime field
+- **Curve Equation**: y² = x³ + 3
+- **Representation**: 4 × 64-bit limbs (little-endian)
+
+## Architecture
+
+```rust
+// Example: GPU-accelerated MSM
+use bn254_fq_gpu::{msm_gpu, G1Affine, Fr};
+
+let bases: Vec<G1Affine> = load_points();
+let scalars: Vec<Fr> = load_scalars();
+
+// Compute MSM on GPU
+let result = msm_gpu(&bases, &scalars)?;
+```
+
+The implementation separates concerns between CUDA kernels for low-level field arithmetic and Rust wrappers providing type-safe, ergonomic APIs.
+
+## Applications
+
+Critical component for accelerating Zero Knowledge Proof systems including:
+- Nova folding framework optimization
+- PLONK/Groth16 proof generation
+- BN254-based zkSNARK protocols
+- Hardware acceleration research for cryptographic workloads
+
+This project directly supports research into FPGA vs GPU performance comparisons for ZKP systems.

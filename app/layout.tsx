@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Raham Butt",
     description:
-      "Co-founder of unkey.dev and founder of planetfall.io",
+      "I build and I hack things.",
     url: "https://github.com/raham24",
     siteName: "Raham Butt",
     images: [

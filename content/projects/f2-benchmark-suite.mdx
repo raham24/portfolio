@@ -1,0 +1,114 @@
+---
+title: "F2 Benchmark Suite"
+description: Comprehensive benchmarking toolkit for AWS EC2 F2 FPGA instances measuring CPU-FPGA communication, throughput, and parallel workload performance
+repository: raham24/f2_benchmark_suite
+date: "2025-10-15"
+published: true
+---
+
+- CPU-FPGA communication throughput measurement
+- FPGA operations-per-second testing
+- Memory bandwidth simulation and analysis
+- Parallel FPGA workload performance evaluation
+- Real-time system resource monitoring
+- Automated benchmark execution with timestamped results
+- JSON-formatted performance reports
+
+## Overview
+
+The F2 Benchmark Suite is a specialized testing framework designed to evaluate the performance characteristics of AWS EC2 F2 instances equipped with AMD Virtex UltraScale+ HBM FPGAs. This suite provides comprehensive metrics on CPU-FPGA communication efficiency, computational throughput, memory bandwidth, and parallel processing capabilities.
+
+## Tech Stack
+
+**Core Technologies**
+- Python 3.6+
+- Shell scripting
+- NumPy for numerical computation
+- psutil for system monitoring
+
+**Target Hardware**
+- AWS EC2 F2 instances (f2.48xlarge)
+- AMD Virtex UltraScale+ HBM VU47P FPGAs
+- Up to 8 FPGAs per instance
+
+**System Specifications**
+- 192 vCPU cores
+- 2 TiB system RAM
+- 16GB HBM per FPGA (460 GiB/s bandwidth)
+- 28 TOPS INT8 computational capacity per FPGA
+
+## Key Features
+
+### Performance Benchmarking
+Comprehensive testing suite measuring critical FPGA performance metrics:
+
+```python
+# Example: FPGA throughput benchmark
+def benchmark_fpga_operations():
+    operations = 0
+    start_time = time.time()
+
+    # Simulate FPGA computations
+    for _ in range(num_iterations):
+        data = np.random.rand(matrix_size, matrix_size)
+        result = np.dot(data, data.T)
+        operations += matrix_size ** 3
+
+    elapsed = time.time() - start_time
+    gops = (operations / elapsed) / 1e9
+
+    return {
+        "throughput_gops": gops,
+        "elapsed_seconds": elapsed
+    }
+```
+
+### CPU-FPGA Communication Testing
+Measures PCIe bandwidth and data transfer efficiency between host CPU and FPGA accelerators, targeting 7+ GB/s throughput rates.
+
+### Memory Bandwidth Analysis
+Evaluates High Bandwidth Memory (HBM) performance, simulating data movement patterns to assess the 460 GiB/s bandwidth capabilities per FPGA.
+
+### Parallel Workload Execution
+Tests multi-FPGA configurations to measure aggregate performance when running distributed computations across all 8 available FPGAs.
+
+### Automated Monitoring
+Real-time tracking of system resources including CPU usage, memory utilization, and thermal characteristics during benchmark execution.
+
+## Benchmark Metrics
+
+**Expected Performance Targets:**
+- Peak memory throughput: 460 GiB/s per FPGA
+- PCIe communication: 7+ GB/s
+- Aggregate operations: 10+ GOPS across all FPGAs
+- Total system throughput: 28 TOPS INT8 per FPGA
+
+## Architecture
+
+The benchmark suite consists of three main components working in concert:
+
+1. **Primary Benchmark Engine** (`f2_fpga_benchmark.py`): Core testing logic and metric collection
+2. **Throughput Monitor** (`fpga_throughput_monitor.py`): Continuous performance tracking utility
+3. **Orchestration Script** (`run_f2_benchmark.sh`): Automated environment setup and execution
+
+```bash
+# Run complete benchmark suite
+./run_f2_benchmark.sh
+
+# Results stored with timestamp
+# Output: benchmark_results_YYYY-MM-DD_HH-MM-SS.json
+```
+
+## Use Cases
+
+This benchmark suite is ideal for:
+- Hardware acceleration research and development
+- FPGA performance evaluation before production deployment
+- Comparing GPU vs FPGA computational efficiency
+- Optimizing Zero Knowledge Proof systems on FPGAs
+- Academic research on hardware-accelerated cryptography
+- Cloud FPGA performance validation
+
+## Research Integration
+
+This benchmark suite directly supports research into hardware acceleration for Zero Knowledge Proof systems, providing the performance data needed to compare FPGA implementations against traditional GPU-based approaches. The detailed metrics inform architectural decisions for cryptographic workload optimization.

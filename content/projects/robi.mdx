@@ -1,0 +1,122 @@
+---
+title: "Robi"
+description: Embedded robotics system built on Raspberry Pi using C for autonomous navigation with PWM motor control and sensor integration
+repository: raham24/robi
+date: "2024-03-10"
+published: true
+---
+
+- DC motor control with PWM speed regulation
+- Servo motor positioning for directional movement
+- Sensor integration for obstacle detection
+- Audio feedback system with alert sounds
+- Modular architecture separating hardware concerns
+- Low-level GPIO programming with bcm2835 library
+- Real-time obstacle avoidance
+
+## Overview
+
+Robi is an embedded robotics system built on Raspberry Pi hardware using C programming. The project demonstrates low-level hardware control, implementing autonomous navigation capabilities through sensor integration, PWM motor control, and real-time decision-making algorithms.
+
+## Tech Stack
+
+**Hardware**
+- Raspberry Pi 3/4 (primary controller)
+- DC motors with PWM control
+- Servo motors for positioning
+- Ultrasonic/IR distance sensors
+- Audio output hardware
+
+**Software**
+- C programming language
+- bcm2835 library (GPIO access)
+- GCC compiler
+- Makefile build system
+
+## Architecture
+
+Robi follows a modular architecture with clear separation of hardware control concerns:
+
+```c
+// Example: Motor control with PWM
+void motor_control_init() {
+    bcm2835_gpio_fsel(MOTOR_PIN_1, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_gpio_fsel(MOTOR_PIN_2, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_pwm_set_mode(0, 1, 1);
+    bcm2835_pwm_set_range(0, PWM_RANGE);
+}
+
+void set_motor_speed(int speed) {
+    // PWM duty cycle control for speed regulation
+    bcm2835_pwm_set_data(0, speed);
+}
+```
+
+### Project Structure
+The codebase is organized into four functional modules:
+
+1. **Motor Control**: DC motor speed regulation using PWM signals
+2. **Servo Management**: Positioning control for directional movement
+3. **Sensor Interface**: Obstacle detection and distance measurement
+4. **Common Utilities**: Shared functionality and hardware abstractions
+
+## Key Features
+
+### PWM Motor Control
+Precise speed regulation for DC motors using Pulse Width Modulation, enabling smooth acceleration, deceleration, and variable speed control for autonomous navigation.
+
+### Servo Positioning
+Accurate angular control of servo motors for steering and sensor platform orientation, allowing the robot to navigate and scan its environment.
+
+### Obstacle Detection
+Real-time sensor processing to identify obstacles and make autonomous navigation decisions. The system can detect objects in the robot's path and trigger appropriate responses.
+
+### Audio Feedback
+Integrated sound system providing operational feedback through MP3 playback, including alert sounds when obstacles are detected for debugging and demonstration purposes.
+
+### Low-Level Hardware Control
+Direct GPIO manipulation using the bcm2835 library, demonstrating understanding of embedded systems programming and hardware interfacing at the register level.
+
+## Technical Highlights
+
+```c
+// Example: Obstacle detection and response
+void autonomous_navigation() {
+    while (running) {
+        int distance = read_sensor();
+
+        if (distance < OBSTACLE_THRESHOLD) {
+            // Obstacle detected
+            play_alert_sound();
+            stop_motors();
+            turn_servo(TURN_ANGLE);
+            // Continue navigation
+        } else {
+            // Path is clear
+            set_motor_speed(NORMAL_SPEED);
+        }
+    }
+}
+```
+
+## Building and Running
+
+```bash
+# Compile the project
+make
+
+# Run the robot (requires root for GPIO access)
+sudo ./robi
+```
+
+## Use Cases
+
+This project demonstrates:
+- Embedded systems development with C
+- Real-time hardware control and sensor processing
+- Autonomous navigation algorithm implementation
+- GPIO programming and hardware interfacing
+- Modular software architecture for robotics
+- Integration of multiple hardware components
+
+Perfect for understanding the fundamentals of robotics programming, embedded systems design, and low-level hardware control on single-board computers.

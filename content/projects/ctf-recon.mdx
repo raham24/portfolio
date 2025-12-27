@@ -1,0 +1,60 @@
+---
+title: "CTF Recon"
+description: Multi-threaded web application reconnaissance tool for CTF competitions and authorized security assessments
+repository: raham24/ctf_recon
+date: "2024-06-12"
+published: true
+---
+
+- Directory and file enumeration with custom wordlists
+- Parameter fuzzing for injection testing
+- Subdomain discovery with DNS resolution
+- Port scanning with banner grabbing
+- Multi-threaded concurrent scanning
+- HTTP security header analysis
+
+## Overview
+
+CTF Recon is a Python-based reconnaissance tool designed for Capture The Flag competitions and authorized penetration testing. The tool automates discovery of hidden infrastructure through directory enumeration, parameter fuzzing, subdomain scanning, and port analysis.
+
+## Tech Stack
+
+- Python 3.6+
+- requests library for HTTP operations
+- Multi-threaded architecture for concurrent scanning
+- Custom wordlists (600+ directories, 400+ parameters, 350+ subdomains)
+
+## Key Features
+
+**Directory Enumeration**: Automated discovery of hidden directories and files using brute force with customizable wordlists and file extension support.
+
+**Parameter Fuzzing**: GET/POST parameter discovery to identify potential injection points and hidden functionality.
+
+**Subdomain Discovery**: DNS-based subdomain enumeration to map target infrastructure and identify additional attack surfaces.
+
+**Port Scanning**: Network port analysis with banner grabbing to fingerprint services and identify potential vulnerabilities.
+
+**Performance Optimization**: Configurable threading (default: 20 threads) and timeout settings for optimal scanning speed across different network conditions.
+
+## Usage
+
+```bash
+# Directory scan
+python3 ctf_recon.py -u https://target.com -d
+
+# Parameter fuzzing
+python3 ctf_recon.py -u https://target.com -p
+
+# Subdomain enumeration
+python3 ctf_recon.py -u target.com -s
+
+# Port scanning
+python3 ctf_recon.py -u target.com -P
+
+# Combined scan with custom threads
+python3 ctf_recon.py -u https://target.com -d -p -t 30
+```
+
+## Applications
+
+Designed for CTF competitions, authorized security assessments, penetration testing engagements, and security research environments.

@@ -1,0 +1,93 @@
+---
+title: "Vessel"
+description: Command-line tool that automates Docker deployment for React and Flutter applications with production-optimized configurations
+repository: raham24/Vessel
+date: "2024-08-15"
+published: true
+---
+
+- One-command deployment for React and Flutter apps
+- Auto-generated production-optimized Nginx configuration
+- Docker-based containerization for consistent deployments
+- Built-in security headers and performance optimization
+- Integrated vulnerability scanning via PensarAI
+- WSL Docker installation automation
+- Simple deployment management commands
+
+## Overview
+
+Vessel is a powerful command-line tool that simplifies the deployment process for React and Flutter applications. By automating Docker configuration and Nginx setup, Vessel eliminates the complexity of production deployments and ensures best practices are followed automatically.
+
+## Tech Stack
+
+**Core**
+- Python (CLI framework)
+- Docker (Containerization)
+- Nginx (Web server)
+- Flask (Backend server)
+
+**Features**
+- Automated configuration generation
+- Static code analysis
+- Container orchestration
+
+## Key Features
+
+### Automated Deployment
+Single-command deployment workflow that handles Docker image building, container creation, and Nginx configuration automatically.
+
+```bash
+# Deploy your React app with one command
+vessel deploy
+
+# Build configuration files
+vessel build
+
+# Manage running containers
+vessel list
+vessel stop <container-name>
+```
+
+### Production-Ready Configuration
+Vessel generates optimized Nginx configurations with:
+- Gzip compression for faster load times
+- Browser caching policies
+- Security headers (CSP, X-Frame-Options, etc.)
+- Static asset optimization
+- Industry best practices built-in
+
+### Security Integration
+Integrated with PensarAI's static code analyzer to scan for vulnerabilities before deployment, ensuring your application meets security standards.
+
+### WSL Support
+Automatic Docker installation detection and setup for Windows Subsystem for Linux environments, making it easy to deploy from any development environment.
+
+## Architecture
+
+Vessel follows a modular architecture that separates concerns between configuration generation, Docker orchestration, and deployment management. The tool analyzes your project structure, generates appropriate configurations, and handles the entire deployment pipeline.
+
+```python
+# Example: Vessel deployment workflow
+def deploy_application(app_path):
+    # Analyze project structure
+    app_type = detect_application_type(app_path)
+
+    # Generate optimized configs
+    generate_nginx_config(app_type)
+    generate_dockerfile(app_type)
+
+    # Build and deploy
+    build_docker_image()
+    run_container()
+
+    # Security scan
+    scan_vulnerabilities()
+```
+
+## Use Cases
+
+Perfect for developers who want to:
+- Quickly deploy React or Flutter applications to production
+- Maintain consistent deployment configurations across projects
+- Automate DevOps workflows without complex CI/CD setup
+- Ensure security and performance best practices

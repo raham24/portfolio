@@ -1,0 +1,57 @@
+---
+title: "Temp & Humidity Alarm App"
+description: React Native mobile app for real-time monitoring and control of ESP32-based environmental sensors
+repository: raham24/Temp_Hum_Alarm_App
+date: "2024-04-20"
+published: true
+---
+
+- Real-time temperature and humidity monitoring
+- Dual unit display (Celsius/Fahrenheit)
+- Heat index calculations
+- Remote control for alarm, LED, and display
+- Cross-platform support (iOS, Android, Web)
+- RESTful API integration with ESP32
+
+## Overview
+
+A React Native mobile application providing a real-time monitoring interface for the [ESP32 Temperature & Humidity Alarm System](temp-hum-alarm). The app enables remote environmental monitoring and device control through a clean, responsive interface.
+
+## Tech Stack
+
+- React Native with Expo
+- TypeScript
+- RESTful API integration
+- Tab-based navigation
+- Service layer architecture
+
+## Key Features
+
+**Real-Time Monitoring**: Live temperature and humidity data with automatic polling and dual unit display supporting both Celsius and Fahrenheit measurements with heat index calculations.
+
+**Remote Control**: Toggle switches for alarm activation, LED indicators, and display control, enabling full device management from the mobile interface.
+
+**Connection Management**: Automatic connection status tracking with built-in error handling and retry logic for reliable communication with ESP32 hardware.
+
+**Cross-Platform**: Single codebase supporting iOS, Android, and web platforms through Expo's unified development framework.
+
+## Architecture
+
+```typescript
+// ESP32 API Service Layer
+const fetchSensorData = async () => {
+  const response = await fetch(`${ESP32_URL}/sensor`);
+  return await response.json();
+};
+
+const toggleAlarm = async (state: boolean) => {
+  await fetch(`${ESP32_URL}/alarm`, {
+    method: 'POST',
+    body: JSON.stringify({ enabled: state })
+  });
+};
+```
+
+## Integration
+
+This mobile app serves as the companion interface for the [Temperature & Humidity Alarm System](temp-hum-alarm), providing remote monitoring and control capabilities for the ESP32-based hardware.
