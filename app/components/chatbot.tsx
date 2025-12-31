@@ -91,7 +91,7 @@ export function Chatbot() {
           <div className="flex items-center justify-between p-4 border-b border-zinc-800">
             <div>
               <h3 className="text-sm font-semibold text-zinc-100">Ask about me</h3>
-              <p className="text-xs text-zinc-500">Powered by llama 3.3</p>
+              <p className="text-xs text-zinc-500">Powered by Gemini 2.0 Flash</p>
             </div>
             <button
               onClick={() => setIsOpen(false)}

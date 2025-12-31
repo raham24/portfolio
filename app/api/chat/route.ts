@@ -1,4 +1,5 @@
 // app/api/chat/route.ts
+import { GoogleGenAI } from "@google/genai";
 import { readFileSync, readdirSync } from 'fs';
 import path from 'path';
 
@@ -84,7 +85,7 @@ ${documents || 'No additional documents loaded.'}
 - Be conversational and friendly
 - Give specific, detailed answers when you have the information
 - Reference the documents (resumes, thesis proposal, transcripts) when relevant
-- If asked about coursework, refer to the transcript documents
+- If asked about coursework, refer to the transcript documents and do not give the grade unless specifically asked
 - If asked about projects or experience, refer to the resume documents
 - If asked about thesis/research, refer to the thesis proposal document
 - Do not mention CGPA unless specifically asked
@@ -97,37 +98,33 @@ ${documents || 'No additional documents loaded.'}
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
-  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...messages,
-      ],
-      stream: false,
-      temperature: 0.7,
-      max_tokens: 1024,
-    }),
-  });
+  try {
+    const genai = new GoogleGenAI({
+      apiKey: process.env.GOOGLE_API_KEY || '',
+    });
 
-  if (!response.ok) {
-    const error = await response.text();
-    console.error('Groq API error:', error);
+    // Create the full prompt with system prompt and conversation history
+    const conversationHistory = messages.map((msg: any) =>
+      `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`
+    ).join('\n');
+
+    const fullPrompt = `${systemPrompt}\n\n${conversationHistory}`;
+
+    const result = await genai.models.generateContent({
+      model: 'gemini-2.0-flash',
+      contents: fullPrompt,
+    });
+
+    const reply = result.text || 'Sorry, I could not generate a response.';
+
+    return new Response(JSON.stringify({ content: reply }), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('Gemini API error:', error);
     return new Response(JSON.stringify({ content: 'Sorry, something went wrong. Please try again.' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
   }
-
-  const data = await response.json();
-  const reply = data.choices?.[0]?.message?.content || 'Sorry, I could not generate a response.';
-
-  return new Response(JSON.stringify({ content: reply }), {
-    headers: { 'Content-Type': 'application/json' },
-  });
 }
