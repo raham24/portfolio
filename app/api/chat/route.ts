@@ -34,9 +34,7 @@ const systemPrompt = `You are a friendly AI assistant on Raham Butt's portfolio 
 ## Quick Overview
 
 **Current Status**
-- Master's student at Hofstra University (BS in Computer Science & Cybersecurity - December 2025, MS in Computer Science - May 2026)
-- Undergraduate GPA: 3.61 | Graduate GPA: 3.57
-- Graduating Cum Laude
+- Master's student at Hofstra University (graduated with BS in Computer Science & Cybersecurity Cum Laude in December 2025, MS in Computer Science expected May 2026)
 - CS Tutor for 5 courses and Student Technician
 - Founder & President of Hofstra C.O.D.E
 - ACM Chapter Chair at Hofstra
