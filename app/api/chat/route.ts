@@ -107,7 +107,7 @@ export async function POST(req: Request) {
       `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`
     ).join('\n');
 
-    const fullPrompt = `${systemPrompt}\n\n${conversationHistory}`;
+    const fullPrompt = `${systemPrompt}\n\nConversation:\n${conversationHistory}\n\nRespond directly without including "Assistant:" or any role prefix in your response.`;
 
     const result = await genai.models.generateContent({
       model: 'gemini-2.0-flash',
