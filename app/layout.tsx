@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import { Analytics } from "./components/analytics";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://rahambutt.com'),
   title: {
     default: "Raham Butt",
     template: "%s | chronark.com",
