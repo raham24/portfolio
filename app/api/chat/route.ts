@@ -133,7 +133,29 @@ function isPromptInjection(text: string): boolean {
 export async function POST(req: Request) {
   // Get IP address for rate limiting
   const forwarded = req.headers.get('x-forwarded-for');
-  const ip = forwarded ? forwarded.split(',')[0] : req.headers.get('x-real-ip') || 'unknown';
+  const realIp = req.headers.get('x-real-ip');
+  const cfConnectingIp = req.headers.get('cf-connecting-ip'); // Cloudflare
+  const trueClientIp = req.headers.get('true-client-ip'); // Cloudflare Enterprise
+
+  const ip = forwarded?.split(',')[0].trim() ||
+             cfConnectingIp ||
+             trueClientIp ||
+             realIp ||
+             'unknown';
+
+  // If IP cannot be determined, block the request for security
+  if (ip === 'unknown') {
+    console.warn('Rate limit: Unable to determine IP address');
+    return new Response(
+      JSON.stringify({
+        content: 'Unable to process request. Please access through the web interface.'
+      }),
+      {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+  }
 
   // Check rate limit
   const rateLimit = rateLimiter.check(ip);
