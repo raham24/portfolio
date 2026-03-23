@@ -27,12 +27,22 @@ const socials = [
 
 export default function Example() {
 	return (
-		<div className=" bg-gradient-to-tl from-zinc-900/0 via-zinc-900 to-zinc-900/0">
+		<div className="bg-gradient-to-tl from-zinc-900/0 via-zinc-900 to-zinc-900/0">
 			<Navigation />
-			<div className="container flex items-center justify-center min-h-screen px-4 mx-auto">
-				<div className="grid w-full grid-cols-1 gap-8 mx-auto mt-32 sm:mt-0 sm:grid-cols-3 lg:gap-16">
+			<div className="container flex flex-col items-center justify-center min-h-screen px-4 mx-auto gap-12">
+				<div className="text-center space-y-4 animate-fade-in-fast" style={{ animationDelay: "0s", animationFillMode: "both" }}>
+					<h2 className="text-4xl font-bold tracking-tight text-zinc-100 sm:text-5xl font-display">
+						Contact
+					</h2>
+					<div className="w-24 h-px mx-auto bg-gradient-to-r from-zinc-500/0 via-zinc-500 to-zinc-500/0" />
+					<p className="text-zinc-400">
+						Reach out through any of these.
+					</p>
+				</div>
+
+				<div className="grid w-full grid-cols-1 gap-8 mx-auto sm:grid-cols-3 lg:gap-16 animate-fade-in-fast" style={{ animationDelay: "0.2s", animationFillMode: "both" }}>
 					{socials.map((s) => (
-						<Card>
+						<Card key={s.label}>
 							<Link
 								href={s.href}
 								target="_blank"
