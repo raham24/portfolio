@@ -22,6 +22,7 @@ export default function About() {
 							About Me
 						</h1>
 						<div className="w-24 h-px mx-auto bg-gradient-to-r from-zinc-500/0 via-zinc-500 to-zinc-500/0" />
+					<p className="text-zinc-400">CS grad student, security researcher, and builder.</p>
 					</div>
 
 					{/* Bio Section */}
@@ -32,12 +33,10 @@ export default function About() {
 							</h2>
 							<div className="space-y-4 text-zinc-400 leading-relaxed">
 								<p>
-									I am a recent undergraduate graduate and current master's student specializing in computer science with a focus on
-									cybersecurity. My personal interests lie in intrusion detection systems, red teaming, hardware and full stack development.
+									I'm a recent CS graduate now pursuing my master's degree, with a focus on cybersecurity. My interests span intrusion detection, red teaming, hardware design, and full-stack development, particularly where low-level thinking and real-world impact intersect.
 								</p>
 								<p>
-									Apart from academics, I have been an active member of various computing clubs and organizations, where I have honed my skills in collaborative projects and leadership roles.
-									I served as the founding president of the largest computing club at my university and the chair of ACM chapter at Hofstra, continuing a legacy of 50 years.
+									Outside of academics, I've been deeply involved in the computing community on campus. I founded and served as the first president of the largest computing club at my university, and chaired the ACM chapter at Hofstra, an organization with over 50 years of history. These roles shaped how I think about collaboration, leadership, and building things that last.
 								</p>
 							</div>
 						</div>
@@ -62,7 +61,7 @@ export default function About() {
 								<div className="relative pl-8 border-l-2 border-zinc-800">
 									<div className="absolute w-3 h-3 bg-zinc-700 rounded-full -left-[7px] top-1"></div>
 									<div className="text-sm text-zinc-500 mb-1">Present</div>
-									<div className="text-zinc-300 font-medium">Student IT Technician</div>
+									<div className="text-zinc-300 font-medium">Senior Student IT Technician</div>
 									<div className="text-zinc-400 text-sm mt-1">
 										3 years at Maurice A. Deane School of Law at Hofstra University
 									</div>
@@ -135,13 +134,10 @@ export default function About() {
 							</h2>
 							<div className="text-zinc-400 leading-relaxed">
 								<p className="mb-4">
-									Currently, I'm deep into my master's thesis on hardware acceleration for
-									Zero Knowledge Proof systems, comparing GPU and FPGA implementations to find
-									the optimal balance between speed and accuracy, working alongside Dr. Xiang Fu.
+									My master's thesis focuses on hardware acceleration for Zero Knowledge Proof systems, benchmarking GPU and FPGA implementations to find the optimal balance between performance and correctness, in collaboration with Dr. Xiang Fu.
 								</p>
 								<p>
-									I also work as a Student IT Technician, working on various projects including upgrading and deploying new systems to improve campus security and efficiency.
-									Along with that, I am work as a Computer Science tutor and teaching assistant, helping fellow students grasp complex concepts and excel in their studies.
+									I also serve as a Senior Student IT Technician at the Maurice A. Deane School of Law, where I've led projects to upgrade and deploy systems that improve campus security and operational efficiency. Alongside that, I tutor and TA for computer science courses, helping students build intuition for concepts that don't always come easy.
 								</p>
 							</div>
 						</div>
@@ -184,7 +180,7 @@ export default function About() {
 					</div>
 				</div>
 			</div>
-			<Chatbot />
+			{/* <Chatbot /> */}
 		</div>
 	);
 }
