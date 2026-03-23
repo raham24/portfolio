@@ -30,7 +30,7 @@ export default async function PostPage({ params }: Props) {
     <div className="bg-zinc-50 min-h-screen">
       <Header project={project} />
 
-      <article className="px-4 py-12 mx-auto prose prose-zinc prose-quoteless">
+      <article className="px-4 py-12 mx-auto prose prose-zinc prose-quoteless animate-fade-in-fast" style={{ animationDelay: "0.4s", animationFillMode: "both" }}>
         <Mdx code={project.body.code} />
       </article>
     </div>
