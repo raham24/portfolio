@@ -1,20 +1,88 @@
 ---
-title: Zero Knowledge Proof Systems for FPGAs
-description: Master's thesis exploring hardware acceleration for Zero Knowledge Proofs by the use of the new Xilinx Field Programmable Gate Arrays, specifically used by Amazon AWS EC2 F2 instances.
-date: "2025-12-24"
-published: false
+title: "Scaling Zero-Knowledge: Comparative MSM Acceleration Across CPU, GPU, and HPC Platforms"
+description: Master's thesis presenting a comparative performance study of multi-scalar multiplication acceleration for the Nova folding-scheme prover across CPU, consumer GPU, and multi-GPU HPC platforms, culminating in a 17.9x end-to-end speedup on 8x NVIDIA A100.
+date: "2026-05-13"
+published: true
 repository: raham24
 ---
 
-
 <div className="text-center">
-My ongoing master's thesis explores hardware acceleration for Zero Knowledge Proof systems, comparing existing GPU solutions to the new FPGA solutions, comparing speed metrics and accuracy.
+A comparative performance study of multi-scalar multiplication (MSM) acceleration for zero-knowledge proof systems, evaluated across a CPU baseline, a single consumer GPU, and a multi-GPU HPC cluster. Completed at Hofstra University under the supervision of Dr. Xiang Fu.
+</div>
+
+## Why MSM
+
+Zero-knowledge proofs have moved out of cryptographic theory and into production systems for blockchain scalability, privacy-preserving identity, and verifiable computation. The constraint on practical deployment is the cost of proof generation, and within modern proof systems **multi-scalar multiplication consumes between 70% and 90% of total prover runtime**. MSM is the bottleneck, and the obvious target for hardware acceleration.
+
+Prior work had evaluated individual hardware platforms in isolation, but there was no systematic, apples-to-apples comparison across the spectrum a real deployment actually chooses between: a single CPU, a single consumer GPU, and a multi-GPU datacenter node. This thesis fills that gap.
+
+## The Approach
+
+The implementation targets the Pallas elliptic curve and integrates with the **Nova folding-scheme prover** through a feature-gated substitution at Nova's commitment trait, leaving the upstream codebase otherwise unmodified. The GPU path is a hybrid Rust/CUDA codebase that evolves through four design points, each one motivated by the architectural bottleneck the previous version exposed:
+
+- **V1: Shared-memory spinlock baseline.** Threads contend for a 255-bucket array in shared memory. Correct, but structurally bounded by a 16.7% SM occupancy ceiling on the RTX 4080. **Peak: 2.05x.**
+- **V2: Sort-based Pippenger.** CUB radix sort over 12-bit signed-digit windows pre-groups contributions per bucket, eliminating contention and lifting bucket state out of shared memory entirely. **Peak: 3.7x at n = 200K.**
+- **V3: Partition-based concurrent streams.** K independent V2 pipelines run on their own slices of the input; the GPU's hardware schedulers overlap host-to-device transfers with kernel execution. **Peak: 4.9x at n = 20M.**
+- **V4: Batch API and multi-GPU dispatch.** Generalises V3 along two axes: a batch API for proof-system-level concurrency (e.g. Nova's L/R commitment pair), and a multi-GPU extension that partitions input across all visible devices, runs an independent V3 pipeline per device, and merges projective partials on the host **without inter-device communication**.
+
+The versions form a hierarchy, not alternatives: V2 is the kernel chain V3 and V4 wrap; V3 is the per-device pipeline V4's multi-GPU path runs on each device. The per-window logic of V2 is preserved unchanged through both subsequent versions.
+
+## Headline Result
+
+On Hofstra's StarHPC cluster, with eight NVIDIA A100 SXM accelerators running V4 against a 32-thread AMD EPYC 7513 CPU baseline:
+
+| n (scalar-point pairs) | EPYC CPU (ms) | 8× A100 (ms) | Speedup |
+| --- | ---: | ---: | ---: |
+| 1M | 554.4 | 166.9 | 3.32x |
+| 10M | 4,409.6 | 424.5 | 10.39x |
+| 50M | 20,035.8 | 1,371.3 | 14.61x |
+| **100M** | **39,639.9** | **2,215.4** | **17.89x** *(peak)* |
+| 200M | 77,184.2 | 4,389.8 | 17.58x |
+
+At n = 200M the CPU takes 77.2 seconds; the 8× A100 dispatch finishes in 4.4 seconds, a **17.6x wall-clock reduction** on the largest input the campaign exercises. A single A100 cannot fit n = 200M (the per-MSM intermediate state exceeds the 80 GB device budget), so above roughly n = 100M the multi-GPU dispatch is not an optimisation but the only configuration that runs at all.
+
+## Platform-Selection Guidelines
+
+The headline number is one figure; the more durable contribution is **empirical guidance on which hardware tier to use at which input size**. The thesis produces a recommendation table, derived from measured crossover points rather than back-of-envelope analysis:
+
+| Input regime | Recommended platform | Why |
+| --- | --- | --- |
+| n < 100K | CPU only | GPU dispatch overhead dominates; CPU's last-level cache holds the bucket array |
+| 100K ≤ n < 10M | Single consumer GPU (RTX 4080-class) | V3 reaches 4.06x at n = 1M; multi-GPU adds dispatch overhead without proportional benefit |
+| 10M ≤ n < 100M | Single datacenter GPU (A100/H100) | Workstation memory budget binds; cluster bandwidth lowers absolute time |
+| n ≥ 100M | Multi-GPU cluster (V4 dispatch) | Single-device memory budget is exhausted; V4 is the only configuration that runs |
+
+## What the Numbers Actually Say
+
+A few findings stand out beyond the headline speedup:
+
+- **Memory architecture, not raw parallelism, governs efficient acceleration.** The biggest single jump in the design progression was V1 → V2, which exchanged fine-grained shared-memory synchronisation for one large `O(n log n)` sort. The GPU's sort hardware absorbs that cost more efficiently than the spinlock's serialisation absorbed its contention.
+- **The CUB radix sort is not the bottleneck.** Per-phase instrumentation at n = 1M attributes only 1.1% of V2's end-to-end time to the sort, contradicting the conventional wisdom that places the primary cost in sort-based MSM there. The dominant on-device phase is warp-per-bucket accumulation (63.4% of V2, 38.2% of V3).
+- **H100 does not beat A100 on this workload.** At the partition sizes used, the accumulation phase is latency-bound rather than bandwidth-bound, so the H100's 3 TB/s vs A100's 2 TB/s does not translate into proportional speedup. At n = 100M, single-device H100 is **0.83x** the A100; the A100 is faster.
+- **Parallel efficiency at 8 devices is ~37%.** Not 100%, but the dispatch model has zero inter-device communication; the limit is host-side orchestration cost, not synchronisation between GPUs.
+
+## Hardware and Software
+
+The empirical campaign uses two distinct platforms:
+
+- **Local workstation:** NVIDIA RTX 4080 (16 GB), Intel Core i7-13700K, 32 GB DDR5, Ubuntu 24.04 LTS, NVIDIA driver 580.126.09.
+- **StarHPC cluster:** 8× NVIDIA A100 SXM4 (80 GB each) on AMD EPYC 7513 nodes; 8× NVIDIA H100 SXM5 on AMD EPYC 9334 nodes. 1024 GB of host memory per node, dispatched via SLURM.
+
+The implementation is built on Rust 1.91.1 and CUDA 12.0/12.4, with the `pallas-gpu` crate statically linking a CUDA library compiled per target architecture (`sm_89` workstation, `sm_80` A100, `sm_90` H100). The Nova integration is a fork at commit `27ea224`; `halo2curves` 0.9.0 provides the Pallas field primitives. Input sizes range from n = 100K to n = 200M.
+
+---
+
+<div className="text-center text-zinc-600 italic">
+Approved by the thesis committee on May 13, 2026.
 </div>
 
 <div className="text-center">
-This is done by moving the multi-scalar multiplication for proof generation to GPU or FPGA for faster processing. Currently, <i><b>this thesis is a work in progress</b></i> and is being done to speed up Nova folding framework. The final product is expected to be 60% faster than GPU implementation.
-</div>
-
-<div className="text-center">
-<i>Last updated 12-23-2025</i>
+<a
+  href="/thesis.pdf"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-block px-6 py-3 mt-4 font-medium text-white no-underline rounded-md bg-zinc-900 hover:bg-zinc-700 transition-colors"
+>
+  Read the full thesis (PDF) &rarr;
+</a>
 </div>

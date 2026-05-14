@@ -139,7 +139,7 @@ export default function About() {
 								</h2>
 								<div className="text-zinc-400 leading-relaxed">
 									<p className="mb-4">
-										My master's thesis focuses on hardware acceleration for Zero Knowledge Proof systems, benchmarking GPU and FPGA implementations to find the optimal balance between performance and correctness, in collaboration with Dr. Xiang Fu.
+										I recently completed my master's thesis on hardware acceleration for Zero Knowledge Proof systems under Dr. Xiang Fu, comparing multi-scalar multiplication performance across CPU, consumer GPU, and a multi-GPU HPC cluster. The final implementation reached a 17.9x end-to-end speedup over the CPU baseline on eight NVIDIA A100s, and produced empirical guidance on which hardware tier to use at which input size.
 									</p>
 									<p>
 										I also serve as a Senior Student IT Technician at the Maurice A. Deane School of Law, where I've led projects to upgrade and deploy systems that improve campus security and operational efficiency. Alongside that, I tutor and TA for computer science courses, helping students build intuition for concepts that don't always come easy.
