@@ -1,8 +1,9 @@
 import "../global.css";
-import { Inter } from "@next/font/google";
-import LocalFont from "@next/font/local";
+import { Inter } from "next/font/google";
+import LocalFont from "next/font/local";
 import { Metadata } from "next";
-import { Analytics } from "./components/analytics";
+import { Analytics as BeamAnalytics } from "./components/analytics";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://rahambutt.com'),
@@ -61,13 +62,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={[inter.variable, calSans.variable].join(" ")}>
       <head>
-        <Analytics />
+        <BeamAnalytics />
       </head>
       <body
         className={`bg-black ${process.env.NODE_ENV === "development" ? "debug-screens" : undefined
           }`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );

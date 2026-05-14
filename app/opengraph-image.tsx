@@ -11,9 +11,8 @@ export const size = {
 export const contentType = 'image/png';
 
 export default async function Image() {
-  // Load Inter font from Google Fonts
-  const interSemiBold = await fetch(
-    new URL('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff')
+  const calSans = await fetch(
+    new URL('../public/fonts/CalSans-SemiBold.ttf', import.meta.url),
   ).then((res) => res.arrayBuffer());
 
   return new ImageResponse(
@@ -29,7 +28,7 @@ export default async function Image() {
           textAlign: 'center',
           alignItems: 'center',
           justifyContent: 'center',
-          fontFamily: 'Inter',
+          fontFamily: 'CalSans',
           fontWeight: 600,
         }}
       >
@@ -40,8 +39,8 @@ export default async function Image() {
       ...size,
       fonts: [
         {
-          name: 'Inter',
-          data: interSemiBold,
+          name: 'CalSans',
+          data: calSans,
           style: 'normal',
           weight: 600,
         },
